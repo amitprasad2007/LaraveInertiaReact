@@ -7,7 +7,6 @@ import { Link } from '@inertiajs/react';
 
 export default function AuthenticatedLayout({ user, header, children }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
-
     return (
         <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
             <nav className="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
@@ -19,7 +18,6 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                     <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800 dark:text-gray-200" />
                                 </Link>
                             </div>
-
                             <div className="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                                 <NavLink href={route('dashboard')} active={route().current('dashboard')}>
                                     Dashboard
@@ -62,7 +60,6 @@ export default function AuthenticatedLayout({ user, header, children }) {
                                             </button>
                                         </span>
                                     </Dropdown.Trigger>
-
                                     <Dropdown.Content>
                                         <Dropdown.Link href={route('profile.edit')}>Profile</Dropdown.Link>
                                         <Dropdown.Link href={route('logout')} method="post" as="button">
