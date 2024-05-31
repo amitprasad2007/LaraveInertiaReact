@@ -3,6 +3,7 @@ import { Head, Link, router } from "@inertiajs/react";
 import Pagination from "@/Components/Pagination.jsx";
 import SelectInput from "@/Components/SelectInput";
 import TextInput from "@/Components/TextInput";
+import {PROJECT_STATUS_CLASS_MAP, PROJECT_STATUS_TEXT_MAP} from "@/constants.jsx";
 export default function Index ({auth, projects, queryParams = null, success
 }){
     queryParams = queryParams || {};
@@ -83,7 +84,11 @@ export default function Index ({auth, projects, queryParams = null, success
                                                     <img src={project.image_path} style={{width: 60}}/>
                                                 </td>
                                                 <td className="px-3 py-3"> {project.name}</td>
-                                                <td className="px-3 py-3"> {project.status}</td>
+                                                <td className="px-3 py-3">
+                                                    <span  className={ "px-2 py-1 rounded text-white " + PROJECT_STATUS_CLASS_MAP[project.status] } >
+                                                        {PROJECT_STATUS_TEXT_MAP[project.status]}
+                                                    </span>
+                                                </td>
                                                 <td className="px-3 py-3 text-nowrap"> {project.created_at}</td>
                                                 <td className="px-3 py-3 text-nowrap"> {project.due_date}</td>
                                                 <td className="px-3 py-3"> {project.createdBy.name}</td>
