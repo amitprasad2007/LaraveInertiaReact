@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Storage;
 
 class ProjectResource extends JsonResource
 {
+    public static $wrap = false;
     /**
      * Transform the resource into an array.
      *
@@ -16,6 +17,7 @@ class ProjectResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+
         return [
             'id' => $this->id,
             'name' => $this->name,
