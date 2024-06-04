@@ -61,7 +61,10 @@ export default function TaskTable({ tasks,
                                   sort_direction={queryParams.sort_direction}
                                   sortChanged={sortChanged}> ID
                     </TableHeading>
-                    <th className="px-3 py-3"> Images</th>
+                    <th className="px-3 py-3">Image</th>
+                    {!hideProjectColumn && (
+                        <th className="px-3 py-3">Project Name</th>
+                    )}
                     <TableHeading name="name"
                                   sort_field={queryParams.sort_field}
                                   sort_direction={queryParams.sort_direction}
@@ -92,6 +95,7 @@ export default function TaskTable({ tasks,
                 <tr className="text-nowrap">
                     <th className="px-3 py-3"></th>
                     <th className="px-3 py-3"></th>
+                    {!hideProjectColumn && <th className="px-3 py-3"></th>}
                     <th className="px-3 py-3">
                         <TextInput
                             className="w-full"
@@ -130,6 +134,9 @@ export default function TaskTable({ tasks,
                         <td className="px-3 py-3">
                             <img src={task.image_path} style={{width: 60}}/>
                         </td>
+                        {!hideProjectColumn && (
+                            <td className="px-3 py-2">{task.project.name}</td>
+                        )}
                         <td className="px-3 py-3"> {task.name}</td>
                         <td className="px-3 py-3">
                                                     <span

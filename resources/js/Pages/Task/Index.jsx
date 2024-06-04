@@ -15,7 +15,9 @@ export default function Index ({auth, tasks, queryParams = null, success
                         <div className="p-6 text-gray-900 dark:text-gray-100">
                             <TaskTable  tasks={tasks}
                                         queryParams={queryParams}
-                                        success={success}></TaskTable>
+                                        success={success}
+
+                            ></TaskTable>
                         </div>
                     </div>
                 </div>
