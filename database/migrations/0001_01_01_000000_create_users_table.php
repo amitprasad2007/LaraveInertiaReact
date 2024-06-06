@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('password');
             $table->rememberToken();
             $table->boolean('is_admin')->default(false);
-            $table->timestamps()->nullable();
+            $table->timestamp('blocked_at')->nullable();
             $table->timestamps();
         });
 
