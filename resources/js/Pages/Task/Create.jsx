@@ -1,10 +1,11 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.jsx";
 import {Head, Link, useForm} from "@inertiajs/react";
 import InputLabel from "@/Components/InputLabel.jsx";
-import SelectInput from "@/Components/SelectInput.jsx";
+import SelectInputext from "@/Components/SelectInputext.jsx";
 import TextInput from "@/Components/TextInput.jsx";
 import InputError from "@/Components/InputError.jsx";
 import TextAreaInput from "@/Components/TextAreaInput.jsx";
+import SelectInput from "@/Components/SelectInput.jsx";
 
 export default function Create({ auth, projects, users }){
 
@@ -40,14 +41,10 @@ export default function Create({ auth, projects, users }){
                             className="p-4 sm:p-8 bg-white dark:bg-gray-800 shadow sm:rounded-lg"
                         >
                             <div>
+
                                 <InputLabel htmlFor="task_project_id" value="Project"/>
-                                <SelectInput name="project_id" id="task_project_id" className="mt-1 block w-full"
-                                             onChange={(e) => setData("project_id", e.target.value)}>
-                                    <option value="">Select Project</option>
-                                    {projects.data.map((project) => (
-                                        <option value={project.id} key={project.id}>{project.name}</option>
-                                    ))}
-                                </SelectInput>
+                                <SelectInputext name="project_id" id="task_project_id" className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"  onChange={(e) => setData("project_id", e.target.value)} projects={projects} />
+
                                 <InputError message={errors.project_id} className="mt-2"/>
                             </div>
                             <div className="mt-4">

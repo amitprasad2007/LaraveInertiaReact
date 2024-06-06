@@ -48,8 +48,8 @@ class TaskController extends Controller
         $projects = Project::orderBy('name', 'asc')->get();
         $users = User::orderBy('name', 'asc')->get();
         return inertia('Task/Create',[
-            'projects' => ProjectResource::collection($projects),
-            'users' => UserResource::collection($users),
+            'projects'=>ProjectResource::collection($projects),
+            'users' =>  UserResource::collection($users),
         ]);
     }
 
