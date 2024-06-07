@@ -1,6 +1,7 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { TASK_STATUS_CLASS_MAP, TASK_STATUS_TEXT_MAP } from "@/constants";
 import { Head, Link } from "@inertiajs/react";
+import ChatLayout from "@/Pages/ChatLayout.jsx";
 
 export default function Dashboard({
                                       auth,
@@ -22,6 +23,7 @@ export default function Dashboard({
             }
         >
             <Head title="Dashboard" />
+            <ChatLayout/>
 
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 grid grid-cols-3 gap-2">
