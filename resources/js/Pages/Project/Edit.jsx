@@ -23,7 +23,7 @@ export default function Edit( {project,auth, tasks, queryParams = null, success
     };
 
     return(
-        <AuthenticatedLayout user={auth.user}
+        <AuthenticatedLayout
                              header={<h2
                                  className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">{`Project -${project.name}- Edit`} </h2>}>
             <Head title={`Project -${project.name}`}></Head>

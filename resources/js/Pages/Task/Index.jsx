@@ -6,8 +6,7 @@ export default function Index ({auth, tasks, queryParams = null, success
                                }){
 
     return(
-        <AuthenticatedLayout user={auth.user}
-                             header={<div className="flex items-center justify-between">
+        <AuthenticatedLayout      header={<div className="flex items-center justify-between">
                                  <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
                                      Tasks
                                  </h2>
