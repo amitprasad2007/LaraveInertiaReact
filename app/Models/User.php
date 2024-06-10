@@ -52,4 +52,15 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->belongsToMany(Group::class,'group_users');
     }
+    public static function getUsersExceptUser()
+    {
+
+    }
+    public static function toConversationArray(User $exceptUser)
+    {
+        $userId = $exceptUser->id;
+        $query = User::select(['users.*','message.message as last_message','message.created_at as last_message_date'])
+            ->where('users.id','!=',$userId)
+            ;
+    }
 }

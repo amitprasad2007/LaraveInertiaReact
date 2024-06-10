@@ -28,4 +28,12 @@ class Group extends Model
     {
         return $this->belongsTo(User::class);
     }
+    public static function getGroupsForUser()
+    {
+
+    }
+    public static function toConversationArray()
+    {
+
+    }
 }
