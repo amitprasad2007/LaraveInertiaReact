@@ -9,6 +9,8 @@ export default function ChatLayout({children}){
     const [sortedConversation,setSortedConversation] =useState([]);
     const [onlineUsers,setOnlineUsers]=useState({});
     const isUserOnline = (userId)=>onlineUsers[userId];
+    console.log('conversations',conversations);
+    console.log('selectedConversation',selectedConversation);
 
     useEffect( ()=>{
         setSortedConversation(
@@ -46,11 +48,13 @@ export default function ChatLayout({children}){
                     users.map( (user)=>[user.id,user])
                 );
                 setOnlineUsers((pervOnlieUsers)=>{
+                    //console.log(pervOnlieUsers);
                     return {...pervOnlieUsers,...onlineUserObj};
                 });
             })
             .joining((user)=>{
                setOnlineUsers((pervOnlieUsers)=>{
+                   console.log(pervOnlieUsers);
                    const updatedUsers ={...pervOnlieUsers}
                    updatedUsers[user.id]=user;
                    return updatedUsers
