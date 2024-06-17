@@ -14,6 +14,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])
         ->name('dashboard');
 
+    Route::get('userchat/{user}',function (){
+        return "ewrwerwe";
+    })->name('chat.user');
+    Route::get('groupchat/{user}',function (){
+        return "ewsdrwerwe";
+    })->name('chat.group');
+
     Route::resource('project', ProjectController::class);
     Route::get('/task/my-tasks', [TaskController::class, 'myTasks'])
         ->name('task.myTasks');

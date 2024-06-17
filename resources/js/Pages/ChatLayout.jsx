@@ -1,6 +1,6 @@
 import {usePage} from "@inertiajs/react";
 import {useEffect, useState} from "react";
-import {PencilSquareIcon} from "@heroicons/react/24/solid/index.js";
+import {PencilSquareIcon} from "@heroicons/react/24/solid";
 import TextInput from "@/Components/TextInput.jsx";
 import ConversationItem from "@/Components/App/ConversationItem.jsx";
 
