@@ -5,8 +5,9 @@ namespace App\Http\Resources;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Storage;
 
-class MessageResource extends JsonResource
+class MessageAttachmentResource extends JsonResource
 {
     public static $wrap = false;
     /**
@@ -18,15 +19,13 @@ class MessageResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'message' => $this->message,
-            'sender_id' => $this->sender_id,
-            'receiver_id' => $this->receiver_id,
-            'sender' => new UserResource($this->sender),
-            'group_id' => $this->group_id,
-            'attachments'=> MessageAttachmentResource::collection($this->attachments),
+            'name' => $this->name,
+            'message_id' => $this->message_id,
+            'mime' => $this->mime,
+            'size' => $this->size,
+            'url' => Storage::url($this->path),
             'created_at' => (new Carbon($this->created_at))->format('Y-m-d'),
             'updated_at' => (new Carbon($this->updated_at))->format('Y-m-d'),
-
         ];
     }
 }
