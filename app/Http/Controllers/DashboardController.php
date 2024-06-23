@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Resources\MessageResource;
 use App\Http\Resources\TaskResource;
+use App\Models\Message;
 use App\Models\Task;
 
 class DashboardController extends Controller
@@ -42,17 +44,14 @@ class DashboardController extends Controller
             ->limit(10)
             ->get();
         $activeTasks = TaskResource::collection($activeTasks);
-        return inertia(
-            'Dashboard',
-            compact(
-                'totalPendingTasks',
-                'myPendingTasks',
-                'totalProgressTasks',
-                'myProgressTasks',
-                'totalCompletedTasks',
-                'myCompletedTasks',
-                'activeTasks'
-            )
-        );
+        return inertia('Dashboard',[
+            'totalPendingTasks'=>$totalPendingTasks,
+            'myPendingTasks'=>$myPendingTasks,
+            'totalProgressTasks'=>$totalProgressTasks,
+            'myProgressTasks'=>$myProgressTasks,
+            'totalCompletedTasks'=>$totalCompletedTasks,
+            'myCompletedTasks'=>$myCompletedTasks,
+            'activeTasks'=>$activeTasks
+        ]);
     }
 }

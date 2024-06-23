@@ -2,6 +2,10 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { TASK_STATUS_CLASS_MAP, TASK_STATUS_TEXT_MAP } from "@/constants";
 import { Head, Link } from "@inertiajs/react";
 import ChatLayout from "@/Pages/ChatLayout.jsx";
+import {useEffect, useRef, useState} from "react";
+import {ChatBubbleLeftRightIcon} from "@heroicons/react/24/solid";
+import ConversationHeader from "@/Components/App/ConversationHeader.jsx";
+
 
 function Dashboard({
                                       totalPendingTasks,
@@ -11,21 +15,58 @@ function Dashboard({
                                       totalCompletedTasks,
                                       myCompletedTasks,
                                       activeTasks,
+                                      messages,
+                                      selectedConversation,
                                   }) {
+    const[localMessages,setLocalMessages]=useState([]);
+    const messagesCtrRef =useRef();
+    useEffect(() => {
+        setLocalMessages(messages)
+    }, [messages]);
+
     return (
+
         <>
             <Head title="Dashboard" />
-            <ChatLayout>
-                <div className="py-12">
-                    <div className="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                        <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
-                            <div className="p-6 text-gray-900 dark:text-gray-100">
-                                Messages
-                            </div>
+            {
+                !messages &&(
+                    <div className="flex flex-col gap-6 justify-center items-center text-center h-full opacity-35">
+                        <div className="text-2xl md:text-4xl p-16 text-slate-200" >
+                            Please select Conversation to see messages
                         </div>
+                        <ChatBubbleLeftRightIcon className="w-32 h-32 inline-block"/>
                     </div>
+                )
+            }
+            {messages &&(
+                <>
+                    <ConversationHeader selectedConversation={selectedConversation}/>
+                    <div
+                        ref={messagesCtrRef}
+                        className="flex-1 overflow-auto p-5"
+                    >
+                        {localMessages.length===0 && (
+                            <div className="flex justify-center items-center h-full">
+                                <div className="text-lg text-slate-200" >
+                                    No Messages Found
+                                </div>
+                            </div>
+                        )}
+                        {localMessages.length>0 && (
+                            <div className="flex-1 flex flex-col">
+                                {localMessages.map((message)=>(
+                                  <MessageItem
+                                      key={message.id}
+                                      message={message}
+                                  />
+                                ))
+                                }
+                            </div>
+                        )}
                     </div>
-            </ChatLayout>
+                    <MessageInput conversation={selectedConversation}/>
+                </>
+            )}
             <div className="py-12">
                 <div className="max-w-7xl mx-auto sm:px-6 lg:px-8 grid grid-cols-3 gap-2">
                     <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">
@@ -119,14 +160,8 @@ function Dashboard({
 
 Dashboard.layout=(page)=>{
     return(
-        <AuthenticatedLayout
-            header={
-                <h2 className="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                    Dashboard
-                </h2>
-            }
-            children={page}
-        >
+        <AuthenticatedLayout user={page.props.auth.user}>
+            <ChatLayout children={page} />
         </AuthenticatedLayout>
 
 
