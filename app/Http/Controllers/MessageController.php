@@ -27,9 +27,11 @@ class MessageController extends Controller
         $messages =Message::where ('sender_id',auth()->id())
             ->where ('receiver_id',$user->id)
             ->orWhere('sender_id',$user->id)
-            ->where ('receiver_id',auth()->id())
+            ->orWhere ('receiver_id',auth()->id())
             ->latest()
             ->paginate(10);
+            //->toSql();
+
         $user = auth()->user();
         $totalPendingTasks = Task::query()
             ->where('status', 'pending')
@@ -63,7 +65,7 @@ class MessageController extends Controller
             ->limit(10)
             ->get();
         $activeTasks = TaskResource::collection($activeTasks);
-
+        //dd($messages);
         return inertia('Dashboard',[
             'selectedConversation'=>$user->toConversationArray(),
             'messages'=>MessageResource::collection($messages),

@@ -64,7 +64,7 @@ function Dashboard({
                             </div>
                         )}
                     </div>
-                    <MessageInput conversation={selectedConversation}/>
+                    {/*<MessageInput conversation={selectedConversation}/>*/}
                 </>
             )}
             <div className="py-12">

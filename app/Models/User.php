@@ -70,7 +70,7 @@ use Illuminate\Notifications\Notifiable;
                            ->where('conversations.user_id2',$userId);
                     });
             })
-            ->leftJoin('messages','messages.id','conversations.last_message_id')
+            ->leftJoin('messages','messages.id','=','conversations.last_message_id')
             ->orderByRaw('IFNULL(users.blocked_at,1)')
             ->orderBy('messages.created_at','desc')
             ->orderBy('users.name');

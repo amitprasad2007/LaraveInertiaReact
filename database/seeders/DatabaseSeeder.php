@@ -60,7 +60,7 @@ class DatabaseSeeder extends Seeder
                     'updated_at'=> new Carbon(),
                 ];
         } )->values();
-        Conversation::insert($conversactions->toArray());
+        Conversation::insertOrIgnore($conversactions->toArray());
         Project::factory()
             ->count(30)
             ->hasTasks(30)
