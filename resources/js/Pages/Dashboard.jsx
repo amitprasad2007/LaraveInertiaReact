@@ -5,6 +5,7 @@ import ChatLayout from "@/Pages/ChatLayout.jsx";
 import {useEffect, useRef, useState} from "react";
 import {ChatBubbleLeftRightIcon} from "@heroicons/react/24/solid";
 import ConversationHeader from "@/Components/App/ConversationHeader.jsx";
+import MessageItem from "@/Components/App/MessageItem.jsx";
 
 
 function Dashboard({
@@ -15,13 +16,17 @@ function Dashboard({
                                       totalCompletedTasks,
                                       myCompletedTasks,
                                       activeTasks,
-                                      messages,
-                                      selectedConversation,
+                                      messages=null,
+                                      selectedConversation=null,
                                   }) {
     const[localMessages,setLocalMessages]=useState([]);
-    const messagesCtrRef =useRef();
+    const messagesCtrRef =useRef(null);
     useEffect(() => {
-        setLocalMessages(messages)
+        messagesCtrRef.current.scrollTop = messagesCtrRef.current.scrollHeight;
+    }, [selectedConversation]);
+
+    useEffect(() => {
+        setLocalMessages(messages ? messages.data.reverse() :[]);
     }, [messages]);
 
     return (

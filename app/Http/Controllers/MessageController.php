@@ -65,7 +65,6 @@ class MessageController extends Controller
             ->limit(10)
             ->get();
         $activeTasks = TaskResource::collection($activeTasks);
-        //dd($messages);
         return inertia('Dashboard',[
             'selectedConversation'=>$user->toConversationArray(),
             'messages'=>MessageResource::collection($messages),
@@ -83,7 +82,7 @@ class MessageController extends Controller
      * @param Group $group
      * @return \Inertia\Response|\Inertia\ResponseFactory
      */
-    public function byGroup(Group $group )
+    public function byGroup(Group $group)
     {
         $messages =Message::where ('group_id',$group->id)
             ->latest()

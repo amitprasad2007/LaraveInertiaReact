@@ -16,7 +16,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         ->name('dashboard');
 
     Route::get('userchat/{user}',[MessageController::class,'byUser'])->name('chat.user');
-    Route::get('groupchat/{user}',[MessageController::class,'byGroup'])->name('chat.group');
+    Route::get('groupchat/{group}',[MessageController::class,'byGroup'])->name('chat.group');
     Route::post('/message',[MessageController::class,'store'])->name('message.store');
     Route::post('/message/{message}',[MessageController::class,'destroy'])->name('message.destroy');
     Route::post('/message/older/{message}',[MessageController::class,'loadOlder'])->name('message.loadOlder');
