@@ -16,8 +16,8 @@ export default function ChatLayout({children}){
     const onSearch=(ev)=>{
         const search =ev.target.value.toLowerCase();
         setLocalConversations(
-            conversation.filter((conversation)=>{
-                return conversation.name.toLowerCase().includes(search);
+            conversations.filter((conversations)=>{
+                return conversations.name.toLowerCase().includes(search);
             })
         );
     };

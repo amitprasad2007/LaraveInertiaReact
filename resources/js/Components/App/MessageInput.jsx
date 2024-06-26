@@ -1,10 +1,40 @@
 import {useState} from "react";
 import {PaperClipIcon,PhotoIcon,FaceSmileIcon,HandThumbUpIcon,PaperAirplaneIcon} from "@heroicons/react/24/solid";
 import NewMessageInput from "@/Components/App/NewMessageInput.jsx";
+
 export default function MessageInput({conversation=null}){
+    console.log(conversation)
      const [newMessage,setNewMessage]=useState("");
     const [inputErrorMessage,setInputErrorMessage]=useState("");
      const [messageSending,setMessageSending]=useState(false);
+     const onSendClick =()=>{
+         if(newMessage.trim()===""){
+             setInputErrorMessage("Message Is Required");
+             setTimeout( ()=>setInputErrorMessage(""),3000 );
+             return;
+         }
+         const formData =new FormData();
+         formData.append("message",newMessage);
+         if(conversation.is_user){
+             formData.append("receiver_id",conversation.id);
+         }else if(conversation.is_group) {
+             formData.append("group_id",conversation.id);
+         }
+         setMessageSending(true);
+         axios.post(route("message.store"),formData,{
+             onUploadProgress: (progressEvent)=>{
+                 const progress = Math.round(
+                     (progressEvent.loaded/progressEvent.total)*100
+                 );
+                 console.log(progress)
+             }
+         }).then((response)=>{
+             setNewMessage("");
+             setMessageSending(false);
+         }).catch((error)=>{
+             setMessageSending(false);
+         });
+     }
     return(
         <div className="flex flex-wrap items-start broder-t border-slate-700 py-3">
             <div className="order-2 flex-1 xs:flex-none xs:order-2 p-2">
@@ -23,9 +53,10 @@ export default function MessageInput({conversation=null}){
                 <div className="flex">
                     <NewMessageInput
                         value={newMessage}
+                        onSend={onSendClick}
                         onChange={(ev)=>setNewMessage(ev.target.value)}
                     />
-                    <button className="btn btn-info rounded-1-none">
+                    <button onClick={onSendClick} className="btn btn-info rounded-l-none ml-1">
                         {messageSending &&(
                             <span className="loading loading-spinner loading-xs"> </span>
                         )}

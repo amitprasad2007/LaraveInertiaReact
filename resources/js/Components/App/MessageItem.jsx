@@ -9,13 +9,13 @@ const MessageItem = ({message})=>{
     return (
         <div
             className={
-                "chat" + (message.sender_id===currentUser.id
+                "chat " + (message.sender_id===currentUser.id
                     ? "chat-end"
                     :"chat-start")
             }
         >
             {<UserAvatar user={message.sender}/>}
-            <div className="chat-header">
+            <div className="chat-header ">
                 {message.sender_id !=currentUser.id
                     ? message.sender.name
                     :""}
@@ -24,7 +24,7 @@ const MessageItem = ({message})=>{
                 </time>
             </div>
             <div
-                className={"chat-bubble relative"+
+                className={"chat-bubble relative "+
                     (message.sender_id === currentUser.id
                         ?"chat-bubble-info"
                         : "")
