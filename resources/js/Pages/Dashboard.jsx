@@ -2,12 +2,11 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { TASK_STATUS_CLASS_MAP, TASK_STATUS_TEXT_MAP } from "@/constants";
 import { Head, Link } from "@inertiajs/react";
 import ChatLayout from "@/Pages/ChatLayout.jsx";
-import {useEffect, useRef, useState} from "react";
+import {useEffect, useRef, useState,useLayoutEffect } from "react";
 import {ChatBubbleLeftRightIcon} from "@heroicons/react/24/solid";
 import ConversationHeader from "@/Components/App/ConversationHeader.jsx";
 import MessageItem from "@/Components/App/MessageItem.jsx";
-
-
+import MessageInput from "@/Components/App/MessageInput.jsx";
 function Dashboard({
                                       totalPendingTasks,
                                       myPendingTasks,
@@ -21,9 +20,18 @@ function Dashboard({
                                   }) {
     const[localMessages,setLocalMessages]=useState([]);
     const messagesCtrRef =useRef(null);
+
+    const scrollToBottom = () => {
+        if (messagesCtrRef.current) {
+            messagesCtrRef.current.scrollTop = messagesCtrRef.current.scrollHeight;
+        }
+    };
+
     useEffect(() => {
-        messagesCtrRef.current.scrollTop = messagesCtrRef.current.scrollHeight;
-    }, [selectedConversation]);
+        // Using a timeout to ensure the DOM updates are completed
+        const timer = setTimeout(scrollToBottom, 100);
+        return () => clearTimeout(timer);
+    }, [ selectedConversation]);
 
     useEffect(() => {
         setLocalMessages(messages ? messages.data.reverse() :[]);
@@ -69,7 +77,7 @@ function Dashboard({
                             </div>
                         )}
                     </div>
-                    {/*<MessageInput conversation={selectedConversation}/>*/}
+                    <MessageInput conversation={selectedConversation}/>
                 </>
             )}
             <div className="py-12">
