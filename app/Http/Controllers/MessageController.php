@@ -27,11 +27,9 @@ class MessageController extends Controller
         $messages =Message::where ('sender_id',auth()->id())
             ->where ('receiver_id',$user->id)
             ->orWhere('sender_id',$user->id)
-            ->orWhere ('receiver_id',auth()->id())
+            ->Where ('receiver_id',auth()->id())
             ->latest()
             ->paginate(10);
-            //->toSql();
-
         $user = auth()->user();
         $totalPendingTasks = Task::query()
             ->where('status', 'pending')
