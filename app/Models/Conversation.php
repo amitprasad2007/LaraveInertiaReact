@@ -47,10 +47,9 @@ class Conversation extends Model
             $query->where('user_id1',$userId2)
                 ->where('user_id2',$userId1);
         })->first();
-
         if($conversation){
             $conversation->update([
-               'last_message-id'=>$message->id,
+               'last_message_id'=>$message->id,
             ]);
         }else{
             Conversation::create([

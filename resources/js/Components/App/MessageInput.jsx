@@ -56,7 +56,7 @@ export default function MessageInput({conversation=null}){
                         onSend={onSendClick}
                         onChange={(ev)=>setNewMessage(ev.target.value)}
                     />
-                    <button onClick={onSendClick} className="btn btn-info rounded-l-none ml-1">
+                    <button onClick={onSendClick} className="btn btn-info rounded-l-none ml-2">
                         {messageSending &&(
                             <span className="loading loading-spinner loading-xs"> </span>
                         )}
