@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import {useEffect, useState} from 'react';
 import ApplicationLogo from '@/Components/ApplicationLogo';
 import Dropdown from '@/Components/Dropdown';
 import NavLink from '@/Components/NavLink';
@@ -9,6 +9,27 @@ export default function AuthenticatedLayout({ header, children }) {
     const page=usePage();
     const user=page.props.auth.user;
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
+
+    useEffect( ()=>{
+        conversations.forEach((conversation)=>{
+            let channel =`message.group.${conversation.id}`;
+            if(conversation.is_user){
+                channel=`message.user.${[
+                    parseInt(user.id),
+                    parseInt(conversation.id),
+                ].sort((a,b)=> a - b).join("-")}`;
+            }
+            Echo.private(channel)
+                .error((error)=>{
+                    console.log(error)
+                })
+                .listen("SocketMessage",(e)=>{
+                    console.log("SocketMessage",e);
+                    const message = e.message;
+                    emit("message.created", message);
+                });
+        });
+    },[conversations] )
     return (
         <div className="min-h-screen bg-gray-100 dark:bg-gray-900  flex flex-col ">
             <nav className="bg-white dark:bg-gray-800 border-b border-gray-100 dark:border-gray-700">
