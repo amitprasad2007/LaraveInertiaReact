@@ -3,7 +3,7 @@ import {PaperClipIcon,PhotoIcon,FaceSmileIcon,HandThumbUpIcon,PaperAirplaneIcon}
 import NewMessageInput from "@/Components/App/NewMessageInput.jsx";
 
 export default function MessageInput({conversation=null}){
-    console.log(conversation)
+   // console.log(conversation)
      const [newMessage,setNewMessage]=useState("");
     const [inputErrorMessage,setInputErrorMessage]=useState("");
      const [messageSending,setMessageSending]=useState(false);
