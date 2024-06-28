@@ -7,6 +7,7 @@ import {ChatBubbleLeftRightIcon} from "@heroicons/react/24/solid";
 import ConversationHeader from "@/Components/App/ConversationHeader.jsx";
 import MessageItem from "@/Components/App/MessageItem.jsx";
 import MessageInput from "@/Components/App/MessageInput.jsx";
+import {useEventBus} from "@/EventBus.jsx";
 function Dashboard({
                                       totalPendingTasks,
                                       myPendingTasks,
@@ -20,17 +21,34 @@ function Dashboard({
                                   }) {
     const[localMessages,setLocalMessages]=useState([]);
     const messagesCtrRef =useRef(null);
-
-    const scrollToBottom = () => {
-        if (messagesCtrRef.current) {
-            messagesCtrRef.current.scrollTop = messagesCtrRef.current.scrollHeight;
+    const {on}=useEventBus();
+    const messageCreated = (message)=>{
+        if(
+            selectedConversation &&
+            selectedConversation.is_group &&
+            selectedConversation.id == message.group_id
+        ){
+            setLocalMessages((prevMessage)=> [...prevMessage,message]);
+        }
+        if(
+            selectedConversation &&
+            selectedConversation.is_user &&
+            (selectedConversation.id == message.sender_id ||
+                selectedConversation.id == message.receiver_id)
+        ){
+            setLocalMessages((prevMessage)=> [...prevMessage,message]);
         }
     };
-
     useEffect(() => {
-        // Using a timeout to ensure the DOM updates are completed
-        const timer = setTimeout(scrollToBottom, 100);
-        return () => clearTimeout(timer);
+        setTimeout( ()=>{
+            if(messagesCtrRef.current){
+                messagesCtrRef.current.scrollTop = messagesCtrRef.current.scrollHeight;
+            }
+        },10 );
+        const offCreated = on('message.created',messageCreated);
+        return ()=>{
+            offCreated();
+        };
     }, [ selectedConversation]);
 
     useEffect(() => {
