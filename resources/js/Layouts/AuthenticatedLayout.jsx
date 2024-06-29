@@ -27,8 +27,7 @@ export default function AuthenticatedLayout({ header, children }) {
                     console.log(error)
                 })
                 .listen("SocketMessage",(e)=>{
-                    console.log("SocketMessage",e);
-                    const message = e.message;
+                   const message = e.message;
                     emit("message.created", message);
                     if(message.sender_id === user.id){
                         return false ;
