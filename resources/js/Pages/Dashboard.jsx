@@ -2,7 +2,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
 import { TASK_STATUS_CLASS_MAP, TASK_STATUS_TEXT_MAP } from "@/constants";
 import { Head, Link } from "@inertiajs/react";
 import ChatLayout from "@/Pages/ChatLayout.jsx";
-import {useEffect, useRef, useState,useLayoutEffect } from "react";
+import {useEffect, useRef, useState, useLayoutEffect, useCallback} from "react";
 import {ChatBubbleLeftRightIcon} from "@heroicons/react/24/solid";
 import ConversationHeader from "@/Components/App/ConversationHeader.jsx";
 import MessageItem from "@/Components/App/MessageItem.jsx";
@@ -21,6 +21,7 @@ function Dashboard({
                                       selectedConversation=null,
                                   }) {
     const[localMessages,setLocalMessages]=useState([]);
+    const loadMoreIntersect =useRef(null);
     const messagesCtrRef =useRef(null);
     const {on}=useEventBus();
     const messageCreated = (message)=>{
@@ -40,6 +41,26 @@ function Dashboard({
             setLocalMessages((prevMessage)=> [...prevMessage,message]);
         }
     };
+
+    const loadMoreMessages = useCallback( ()=>{
+        const firstMessage = localMessages[0];
+        axios.get(route("message.loadOlder",firstMessage.id))
+            .then(({data})=>{
+                if(data.data.length==0){
+                    setNoMoreMessages(true);
+                    return false;
+                }
+                const scrollHeight = messagesCtrRef.current.scrollHeight;
+                const scrollTop =messagesCtrRef.current.scrollTop;
+                const clientHeight = messagesCtrRef.current.clientHeight;
+                const tmpScrollFromBottom = scrollHeight - scrollTop - clientHeight;
+                console.log('tmpScrollFromBottom',tmpScrollFromBottom);
+                setScrollFromBottom(scrollHeight - scrollTop - clientHeight);
+                setLocalMessages((prevMessage)=>{
+                     return[...data.data.reverse(), ...prevMessage];
+                })
+            });
+    },[localMessages]);
     useEffect(() => {
         setTimeout( ()=>{
             if(messagesCtrRef.current){
@@ -86,6 +107,7 @@ function Dashboard({
                         )}
                         {localMessages.length>0 && (
                             <div className="flex-1 flex flex-col">
+                                <div ref={loadMoreIntersect}></div>
                                 {localMessages.map((message)=>(
                                   <MessageItem
                                       key={message.id}
@@ -99,14 +121,14 @@ function Dashboard({
                     <MessageInput conversation={selectedConversation}/>
                 </>
             )}
-            {/*<Taskmanage */}
-            {/*    totalPendingTasks={totalPendingTasks} */}
-            {/*    myPendingTasks={myPendingTasks} */}
-            {/*    totalProgressTasks={totalProgressTasks} */}
-            {/*    myProgressTasks ={myProgressTasks} */}
-            {/*    totalCompletedTasks={totalCompletedTasks} */}
-            {/*    myCompletedTasks={myCompletedTasks} */}
-            {/*    activeTasks={activeTasks} />*/}
+            <Taskmanage
+                totalPendingTasks={totalPendingTasks}
+                myPendingTasks={myPendingTasks}
+                totalProgressTasks={totalProgressTasks}
+                myProgressTasks ={myProgressTasks}
+                totalCompletedTasks={totalCompletedTasks}
+                myCompletedTasks={myCompletedTasks}
+                activeTasks={activeTasks} />
         </>
     );
 }
