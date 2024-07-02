@@ -8,6 +8,9 @@ export default function MessageInput({conversation=null}){
     const [inputErrorMessage,setInputErrorMessage]=useState("");
      const [messageSending,setMessageSending]=useState(false);
      const onSendClick =()=>{
+         if(messageSending){
+             return;
+         }
          if(newMessage.trim()===""){
              setInputErrorMessage("Message Is Required");
              setTimeout( ()=>setInputErrorMessage(""),3000 );
@@ -56,7 +59,7 @@ export default function MessageInput({conversation=null}){
                         onSend={onSendClick}
                         onChange={(ev)=>setNewMessage(ev.target.value)}
                     />
-                    <button onClick={onSendClick} className="btn btn-info rounded-l-none ml-2">
+                    <button onClick={onSendClick} disabled={messageSending} className="btn btn-info rounded-l-none ml-2">
                         {messageSending &&(
                             <span className="loading loading-spinner loading-xs"> </span>
                         )}

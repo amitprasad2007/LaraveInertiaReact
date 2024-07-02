@@ -1,8 +1,7 @@
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout";
-import { TASK_STATUS_CLASS_MAP, TASK_STATUS_TEXT_MAP } from "@/constants";
-import { Head, Link } from "@inertiajs/react";
+import { Head } from "@inertiajs/react";
 import ChatLayout from "@/Pages/ChatLayout.jsx";
-import {useEffect, useRef, useState, useLayoutEffect, useCallback} from "react";
+import {useEffect, useRef, useState,  useCallback} from "react";
 import {ChatBubbleLeftRightIcon} from "@heroicons/react/24/solid";
 import ConversationHeader from "@/Components/App/ConversationHeader.jsx";
 import MessageItem from "@/Components/App/MessageItem.jsx";
@@ -21,6 +20,8 @@ function Dashboard({
                                       selectedConversation=null,
                                   }) {
     const[localMessages,setLocalMessages]=useState([]);
+    const [noMoreMessages,setNoMoreMessages] = useState(false);
+    const [scrollFromBottom,setScrollFromBottom] = useState(0);
     const loadMoreIntersect =useRef(null);
     const messagesCtrRef =useRef(null);
     const {on}=useEventBus();
@@ -43,12 +44,15 @@ function Dashboard({
     };
 
     const loadMoreMessages = useCallback( ()=>{
+        if(noMoreMessages){
+            return ;
+        }
         const firstMessage = localMessages[0];
         axios.get(route("message.loadOlder",firstMessage.id))
             .then(({data})=>{
                 if(data.data.length==0){
                     setNoMoreMessages(true);
-                    return false;
+                    return ;
                 }
                 const scrollHeight = messagesCtrRef.current.scrollHeight;
                 const scrollTop =messagesCtrRef.current.scrollTop;
@@ -60,7 +64,7 @@ function Dashboard({
                      return[...data.data.reverse(), ...prevMessage];
                 })
             });
-    },[localMessages]);
+    },[localMessages,noMoreMessages]);
     useEffect(() => {
         setTimeout( ()=>{
             if(messagesCtrRef.current){
@@ -68,6 +72,8 @@ function Dashboard({
             }
         },10 );
         const offCreated = on('message.created',messageCreated);
+        setScrollFromBottom(0)
+        setNoMoreMessages(false)
         return ()=>{
             offCreated();
         };
@@ -77,6 +83,31 @@ function Dashboard({
         setLocalMessages(messages ? messages.data.reverse() :[]);
     }, [messages]);
 
+    useEffect(() => {
+        if(messagesCtrRef.current && scrollFromBottom != null){
+            messagesCtrRef.current.scrollTop = messagesCtrRef.current.scrollHeight - messagesCtrRef.current.offsetHeight -scrollFromBottom;
+        }
+        if(noMoreMessages){
+            return ;
+        }
+        const observer = new IntersectionObserver(
+            (entries)=>
+                entries.forEach(
+                    (entry)=>entry.isIntersecting && loadMoreMessages()
+                ),
+            {
+            rootMargin: "0px 0px 250px 0px",
+            }
+        );
+        if(loadMoreIntersect.current){
+            setTimeout(()=>{
+                observer.observe(loadMoreIntersect.current)
+            },100);
+        }
+        return ()=>{
+            observer.disconnect();
+        };
+    }, [localMessages]);
     return (
 
         <>
@@ -121,14 +152,14 @@ function Dashboard({
                     <MessageInput conversation={selectedConversation}/>
                 </>
             )}
-            <Taskmanage
-                totalPendingTasks={totalPendingTasks}
-                myPendingTasks={myPendingTasks}
-                totalProgressTasks={totalProgressTasks}
-                myProgressTasks ={myProgressTasks}
-                totalCompletedTasks={totalCompletedTasks}
-                myCompletedTasks={myCompletedTasks}
-                activeTasks={activeTasks} />
+            {/*<Taskmanage*/}
+            {/*    totalPendingTasks={totalPendingTasks}*/}
+            {/*    myPendingTasks={myPendingTasks}*/}
+            {/*    totalProgressTasks={totalProgressTasks}*/}
+            {/*    myProgressTasks ={myProgressTasks}*/}
+            {/*    totalCompletedTasks={totalCompletedTasks}*/}
+            {/*    myCompletedTasks={myCompletedTasks}*/}
+            {/*    activeTasks={activeTasks} />*/}
         </>
     );
 }
