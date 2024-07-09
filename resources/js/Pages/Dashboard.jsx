@@ -152,14 +152,14 @@ function Dashboard({
                     <MessageInput conversation={selectedConversation}/>
                 </>
             )}
-            {/*<Taskmanage*/}
-            {/*    totalPendingTasks={totalPendingTasks}*/}
-            {/*    myPendingTasks={myPendingTasks}*/}
-            {/*    totalProgressTasks={totalProgressTasks}*/}
-            {/*    myProgressTasks ={myProgressTasks}*/}
-            {/*    totalCompletedTasks={totalCompletedTasks}*/}
-            {/*    myCompletedTasks={myCompletedTasks}*/}
-            {/*    activeTasks={activeTasks} />*/}
+            <Taskmanage
+                totalPendingTasks={totalPendingTasks}
+                myPendingTasks={myPendingTasks}
+                totalProgressTasks={totalProgressTasks}
+                myProgressTasks ={myProgressTasks}
+                totalCompletedTasks={totalCompletedTasks}
+                myCompletedTasks={myCompletedTasks}
+                activeTasks={activeTasks} />
         </>
     );
 }
