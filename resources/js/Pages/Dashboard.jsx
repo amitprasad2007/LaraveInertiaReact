@@ -6,7 +6,7 @@ import {ChatBubbleLeftRightIcon} from "@heroicons/react/24/solid";
 import ConversationHeader from "@/Components/App/ConversationHeader.jsx";
 import MessageItem from "@/Components/App/MessageItem.jsx";
 import MessageInput from "@/Components/App/MessageInput.jsx";
-import {useEventBus} from "@/EventBus.jsx";
+import {useEventBus} from "@/EventBus";
 import Taskmanage from "@/Components/App/Taskmanage.jsx";
 function Dashboard({
                                       totalPendingTasks,

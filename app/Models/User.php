@@ -89,7 +89,7 @@ use Illuminate\Notifications\Notifiable;
             'updated_at'=>$this->updated_at,
             'blocked-at'=>$this->blocked_at,
             'last_message'=>$this->last_message,
-            'last_message_date'=>$this->last_message_date,
+            'last_message_date'=>$this->last_message_date ? ($this->last_message_date.' UTC'):null,
 
         ];
     }

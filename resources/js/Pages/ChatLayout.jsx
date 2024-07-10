@@ -3,14 +3,17 @@ import {useEffect, useState} from "react";
 import {PencilSquareIcon} from "@heroicons/react/24/solid";
 import TextInput from "@/Components/TextInput.jsx";
 import ConversationItem from "@/Components/App/ConversationItem.jsx";
+import {useEventBus} from "@/EventBus";
 
 export default function ChatLayout({children}){
+
     const page =usePage();
     const conversations = page.props.conversations;
     const selectedConversation = page.props.selectedConversation;
     const [localConversations,setLocalConversations] =useState([]);
     const [sortedConversations,setSortedConversations] =useState([]);
     const [onlineUsers,setOnlineUsers]=useState({});
+    const {on}=useEventBus();
     const isUserOnline = (userId)=>onlineUsers[userId];
 
     const onSearch=(ev)=>{
@@ -22,6 +25,34 @@ export default function ChatLayout({children}){
         );
     };
 
+    const messageCreated= (message)=>{
+        setLocalConversations((oldUsers)=>{
+         return oldUsers.map((u)=> {
+             if(message.receiver_id && !u.is_group &&
+                 (u.id==message.sender_id || u.id==message.receiver_id )
+             ){
+                u.last_message = message.message;
+                u.last_message_date = message.created_at;
+                return u;
+             }
+             if(message.group_id && u.is_group && u.id == message.group_id){
+                 u.last_message = message.message;
+                 u.last_message_date = message.created_at;
+                 return u;
+             }
+             return u;
+         } )
+      });
+    };
+
+    useEffect(()=>{
+        console.log('werwerwerwerwer');
+        const offCreated = on("message.created",messageCreated);
+        return ()=>{
+            offCreated();
+        };
+    },[on]);
+
     useEffect( ()=>{
         setSortedConversations(
             localConversations.sort( (a,b)=>{
@@ -32,14 +63,14 @@ export default function ChatLayout({children}){
                 }else if(b.blocked_at){
                     return -1;
                 }
-                if(a.last_message_date && a.last_message_date ){
+                if(a.last_message_date && b.last_message_date ){
                     return b.last_message_date.localeCompare(
                         a.last_message_date
                     );
-                }else if(a.last_message_date){
-                    return -1;
                 }else if(b.last_message_date){
                     return 1;
+                }else if(a.last_message_date){
+                    return -1;
                 }else {
                     return 0;
                 }
@@ -50,7 +81,6 @@ export default function ChatLayout({children}){
     useEffect( ()=>{
         setLocalConversations(conversations);
     },[conversations]);
-
 
     useEffect(() => {
         Echo.join("online")
